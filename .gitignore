@@ -1,0 +1,59 @@
+# === Unity Meta Files ===
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# === User-specific ===
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# === Crash reports & backups ===
+sysinfo.txt
+*.stacktrace
+*.bak
+*.old
+*.orig
+
+# === Unity Asset Database ===
+*.pidb.meta
+*.pdb.meta
+
+# === OS Specific ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Rider / VS Code / JetBrains ===
+.idea/
+.vscode/
+*.code-workspace
+
+# === Unity Cache & VSCode Unity Analyzer ===
+.vs/
+*.VisualStudio/
+
+# === Unity Build Generated ===
+*.apk
+*.aab
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserstate
+*.xcuserdata/
+
+# === Shader Cache ===
+UnityShaderCache/
+
+# === Collaborate ===
+.collabignore
+.collab/
