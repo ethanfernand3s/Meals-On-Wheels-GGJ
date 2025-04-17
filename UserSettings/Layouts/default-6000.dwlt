@@ -633,7 +633,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 34730000
     m_LastClickedID: 29492
-    m_ExpandedIDs: 00000000dc600000
+    m_ExpandedIDs: 00000000c6690000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -662,7 +662,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000dc600000
+    m_ExpandedIDs: 00000000c6690000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1205,6 +1205,20 @@ MonoBehaviour:
       layout: 4
       size: {x: 0, y: 0}
       sizeOverridden: 0
+    - dockPosition: 1
+      containerId: overlay-container--right
+      displayed: 0
+      id: unity-spline-inspector
+      index: 10
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":0.0,"y":0.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      floating: 0
+      collapsed: 0
+      snapOffset: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 0}
+      snapCorner: 0
+      layout: 4
+      size: {x: 0, y: 0}
+      sizeOverridden: 0
     m_ContainerData:
     - containerId: overlay-toolbar__top
       scrollOffset: 0
@@ -1232,7 +1246,7 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: -4.3407736, y: -2.6581159, z: 1.4098577}
+    m_Target: {x: 75.43659, y: -39.934216, z: 3.5594702}
     speed: 2
     m_Value: {x: -4.3407736, y: -2.6581159, z: 1.4098577}
   m_RenderMode: 0
@@ -1280,11 +1294,11 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.20496343, y: -0.60832006, z: 0.16659516, w: 0.7484176}
+    m_Target: {x: -0.17725381, y: -0.6741972, z: 0.17160755, w: -0.69601727}
     speed: 2
     m_Value: {x: -0.20496345, y: 0.60832006, z: -0.16659516, w: -0.7484177}
   m_Size:
-    m_Target: 7.045708
+    m_Target: 47.17437
     speed: 2
     m_Value: 7.045708
   m_Ortho:

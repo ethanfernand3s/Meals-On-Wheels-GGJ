@@ -5,15 +5,16 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - canPickUp
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Interactable
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - holdLayer
   - 
   - 
   - 
