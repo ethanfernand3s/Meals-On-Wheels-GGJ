@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
-  - canPickUp
   layers:
   - Default
   - TransparentFX
@@ -15,7 +14,7 @@ TagManager:
   - UI
   - Player
   - holdLayer
-  - 
+  - Ground
   - 
   - 
   - 
