@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using DefaultNamespace;
+using Unity.Cinemachine;
 using UnityEngine;
 
 [System.Serializable]
@@ -9,7 +11,7 @@ public struct CarWheelTransforms
     public bool CanSteer;
     public Transform gfxTransform;
 }
-public class CarPhysics : MonoBehaviour
+public class CarPhysics : MonoBehaviour, IInteractable
 {
     public CarWheelTransforms[] carWheelTransforms = new CarWheelTransforms[4];
     
@@ -25,18 +27,39 @@ public class CarPhysics : MonoBehaviour
         private Rigidbody carRigidBody;
         public AnimationCurve gripFactorCurve;
         public AnimationCurve torqueFactorCurve;
+
+        public bool isInCar;
+        public Transform playersSeatTransform;
+        public GameObject player;
+        public CinemachineCamera cinemachineCamera;
     
       private void Start()
       {
           carRigidBody = GetComponent<Rigidbody>();
+          isInCar = false;
+      }
+
+      public void Interact(RaycastHit hit)
+      {
+          if (!isInCar)
+          {
+              cinemachineCamera.transform.LookAt(gameObject.transform);
+              player.GetComponent<PhysicsBasedCharacterController>().enabled = false;
+              player.transform.position = playersSeatTransform.position;
+              player.transform.rotation = playersSeatTransform.rotation;
+              isInCar = true;
+          }
       }
     private void FixedUpdate()
     {
-        steerInput = Input.GetAxis("Horizontal");
-        accelInput = Input.GetAxis("Vertical");
+        if (isInCar)
+        {
+            steerInput = Input.GetAxis("Horizontal");
+            accelInput = Input.GetAxis("Vertical");
+        }
         foreach(var wheelTransform in carWheelTransforms)
         {
-            CalculateTireForces(wheelTransform);
+            CalculateTireForces(wheelTransform, isInCar);
             if (wheelTransform.CanSteer) {
                 // Rotate the wheel's transform around its Y-axis by steerAngle.
                 Vector3 currentEuler = wheelTransform.wheelTransform.localEulerAngles;
@@ -49,9 +72,18 @@ public class CarPhysics : MonoBehaviour
         
         Debug.Log(accelInput);
 
+        if (isInCar && Input.GetKey(KeyCode.E))
+        {
+            player.GetComponent<PhysicsBasedCharacterController>().enabled = true;
+            Vector3 Offset = new Vector3(-2f, 0.0f, 0);
+            player.transform.position = playersSeatTransform.position + Offset;
+            isInCar = false;
+            cinemachineCamera.transform.LookAt(player.transform);
+        }
+
     }
 
-    private void CalculateTireForces(CarWheelTransforms wheelTransforms)
+    private void CalculateTireForces(CarWheelTransforms wheelTransforms, bool isInCar)
     {
         Transform wheelTransform = wheelTransforms.wheelTransform;
         Transform gfxTransform = wheelTransforms.gfxTransform;
@@ -65,7 +97,7 @@ public class CarPhysics : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, restLength + wheelRadius))
         {
             // ----------Suspension------------
-            
+
             //world-space direction of spring force;
             Vector3 springDir = wheelTransform.up;
 
@@ -84,51 +116,51 @@ public class CarPhysics : MonoBehaviour
             //apply force to wheel Y (this is suspension)
             carRigidBody.AddForceAtPosition(springDir * force, wheelTransform.position);
             gfxTransform.position = wheelTransform.position + (down * (hit.distance - wheelRadius));
-        // ----------Suspension------------
-        
-        // ----------Steering------------
-        //world direction of spring force
-        Vector3 steeringDir = wheelTransform.right ;
 
-       
-        //get the tire velocity in the steering direction
-        float steeringVel = Vector3.Dot(steeringDir, tireWorldVel);
-        
-        //the change in velocity  is the steering val * grip 0 = no grip 1 = full grip
-        float desiredVelChange = -steeringVel *gripFactorCurve.Evaluate(Mathf.Abs(steeringVel));
+            // ----------Suspension------------
+            if (isInCar)
+            {
+                // ----------Steering------------
 
-       
-        //turn change in velocity in a acceleration 
-        float desiredAccel = desiredVelChange / Time.deltaTime;
-        //Steering force
-        carRigidBody.AddForceAtPosition(steeringDir * desiredAccel,wheelTransform.position);
-        
-        // ----------Steering------------
-        
-        // ----------Acceleration------------
+                //world direction of spring force
+                Vector3 steeringDir = wheelTransform.right;
 
-        //world space direction of Accel/braking
-        Vector3 accelDir = wheelTransform.forward;
-        
-        //get the forward speed of the car  relative to the car
-        float carSpeed = Vector3.Dot(wheelTransform.forward, carRigidBody.linearVelocity);
-        
-        //normailze 
-        float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed / topCarSpeed));
-        
-        // allowed torque
-        float availableTorque = torqueFactorCurve.Evaluate(normalizedSpeed) * accelInput * carSpeedForce;
-        
-        carRigidBody.AddForceAtPosition(accelDir * availableTorque, wheelTransform.position);
-        gfxTransform.Rotate(Vector3.up, carSpeed);
+
+                //get the tire velocity in the steering direction
+                float steeringVel = Vector3.Dot(steeringDir, tireWorldVel);
+
+                //the change in velocity  is the steering val * grip 0 = no grip 1 = full grip
+                float desiredVelChange = -steeringVel * gripFactorCurve.Evaluate(Mathf.Abs(steeringVel));
+
+
+                //turn change in velocity in a acceleration 
+                float desiredAccel = desiredVelChange / Time.deltaTime;
+                //Steering force
+                carRigidBody.AddForceAtPosition(steeringDir * desiredAccel, wheelTransform.position);
+
+                // ----------Steering------------
+
+                // ----------Acceleration------------
+
+                //world space direction of Accel/braking
+                Vector3 accelDir = wheelTransform.forward;
+
+                //get the forward speed of the car  relative to the car
+                float carSpeed = Vector3.Dot(wheelTransform.forward, carRigidBody.linearVelocity);
+
+                //normailze 
+                float normalizedSpeed = Mathf.Clamp01(Mathf.Abs(carSpeed / topCarSpeed));
+
+                // allowed torque
+                float availableTorque = torqueFactorCurve.Evaluate(normalizedSpeed) * accelInput * carSpeedForce;
+
+                carRigidBody.AddForceAtPosition(accelDir * availableTorque, wheelTransform.position);
+                gfxTransform.Rotate(Vector3.up, carSpeed);
+            }
         }
         else
         {
-           
             gfxTransform.position = wheelTransform.position + (down *  restLength );
-            
         }
-        
-       
     }
 }
