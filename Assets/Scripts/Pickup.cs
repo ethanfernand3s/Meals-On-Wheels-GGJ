@@ -33,7 +33,7 @@ public class Pickup : MonoBehaviour, IInteractable
         
         while (heldObj == null)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 2f + Mathf.Sin(Time.time) * 0.5f, gameObject.transform.position.z);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, .75f + Mathf.Sin(Time.time) * 0.5f, gameObject.transform.position.z);
             
             yield return null;
         }
