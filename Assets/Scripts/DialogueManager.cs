@@ -11,6 +11,7 @@ public class DialogueManager : MonoBehaviour
     public Image characterIcon;
     public TextMeshProUGUI characterName;
     public TextMeshProUGUI dialogueArea;
+    public TextMeshProUGUI buttonText;
  
     private Queue<DialogueLine> lines;
     
@@ -26,13 +27,19 @@ public class DialogueManager : MonoBehaviour
             Instance = this;
  
         lines = new Queue<DialogueLine>();
+        
+        gameObject.SetActive(false);
     }
  
     public void StartDialogue(Dialogue dialogue)
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        
         isDialogueActive = true;
- 
-        animator.Play("show");
+
+        gameObject.SetActive(true);
+        animator.Play("PopIn");
  
         lines.Clear();
  
@@ -50,6 +57,10 @@ public class DialogueManager : MonoBehaviour
         {
             EndDialogue();
             return;
+        }
+        else if (lines.Count == 1)
+        {
+            buttonText.text = "Close";
         }
  
         DialogueLine currentLine = lines.Dequeue();
@@ -75,6 +86,10 @@ public class DialogueManager : MonoBehaviour
     void EndDialogue()
     {
         isDialogueActive = false;
-        animator.Play("hide");
+        animator.Play("PopOut");
+        
+        gameObject.SetActive(isDialogueActive);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }

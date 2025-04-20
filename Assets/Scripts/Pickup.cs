@@ -1,23 +1,43 @@
+using System;
+using System.Collections;
 using DefaultNamespace;
 using UnityEngine;
 
 public class Pickup : MonoBehaviour, IInteractable
 {
+    public static Pickup Instance;
     public GameObject player;
     public Transform holdPos;
     
     public float throwForce = 500f; //force at which the object is thrown at
     private float rotationSensitivity = 1f; //how fast/slow the object is rotated in relation to mouse movement
-    private GameObject heldObj; //object which we pick up
+    public GameObject heldObj; //object which we pick up
     private Rigidbody heldObjRb; //rigidbody of object we pick up
     private bool canDrop = true; //this is needed so we don't throw/drop object when rotating the object
     private int LayerNumber; //layer index
     
+    private Coroutine FloatingAnimCoroutine;
+    
     void Start()
     {
-        LayerNumber = LayerMask.NameToLayer("holdLayer"); 
+        if(Instance == null)
+            Instance = this;
+        LayerNumber = LayerMask.NameToLayer("holdLayer");
+        
+        FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
     }
 
+    private IEnumerator PickupFloatingAnimation()
+    {
+        gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+        
+        while (heldObj == null)
+        {
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, 2f + Mathf.Sin(Time.time) * 0.5f, gameObject.transform.position.z);
+            
+            yield return null;
+        }
+    }
     public void Interact(RaycastHit hit)
     {
         if (heldObj == null) //if currently not holding anything
@@ -28,6 +48,8 @@ public class Pickup : MonoBehaviour, IInteractable
                 //pass in object hit into the PickUpObject function
                 PickUpObject(hit.transform.gameObject);
             }
+            StopCoroutine(FloatingAnimCoroutine);
+            FloatingAnimCoroutine = null;
         }
         else
         {
@@ -44,10 +66,17 @@ public class Pickup : MonoBehaviour, IInteractable
         {
             MoveObject(); //keep object position at holdPos
             RotateObject();
-            if (Input.GetKeyDown(KeyCode.Mouse0) && canDrop)
+            if (Input.GetKeyDown(KeyCode.Mouse0) && canDrop && Cursor.lockState == CursorLockMode.Locked)
             {
                 StopClipping();
                 ThrowObject();
+            }
+        }
+        else
+        {
+            if (gameObject.GetComponent<Rigidbody>().linearVelocity == Vector3.zero)
+            {
+                FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
             }
         }
     }
@@ -95,7 +124,7 @@ public class Pickup : MonoBehaviour, IInteractable
     void ThrowObject()
     {
         //same as drop function, but add force to object before undefining it
-        Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
+            Physics.IgnoreCollision(heldObj.GetComponent<Collider>(), player.GetComponent<Collider>(), false);
         heldObj.layer = 3;
         heldObjRb.isKinematic = false;
         heldObj.transform.parent = null;
