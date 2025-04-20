@@ -3,19 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - Ground
-  - canPickUp
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Interactable
+  - 
   - Water
   - UI
-  - Player
-  - holdLayer
-  - Platform
+  - 
+  - 
+  - 
   - 
   - 
   - 
