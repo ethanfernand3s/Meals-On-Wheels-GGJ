@@ -31,7 +31,7 @@ public class Interact : MonoBehaviour
         if (interactable != null)
         {
             interactable.Interact(hit);
-        }
+        }   
         else
         {
             Debug.LogWarning($"'{hitObject.name}' Can't Interact With Object Since There Is No Interactable Interface");
