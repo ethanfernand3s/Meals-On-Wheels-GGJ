@@ -32,6 +32,7 @@ public class CarPhysics : MonoBehaviour, IInteractable
         public Transform playersSeatTransform;
         public GameObject player;
         public CinemachineCamera cinemachineCamera;
+        private float exitCooldown = 0f;
     
       private void Start()
       {
@@ -41,21 +42,33 @@ public class CarPhysics : MonoBehaviour, IInteractable
 
       public void Interact(RaycastHit hit)
       {
-          if (!isInCar)
+          if (!isInCar && exitCooldown <= 0f)
           {
               cinemachineCamera.transform.LookAt(gameObject.transform);
               player.GetComponent<PhysicsBasedCharacterController>().enabled = false;
-              player.transform.position = playersSeatTransform.position;
-              player.transform.rotation = playersSeatTransform.rotation;
+              
+              Rigidbody playerRigidbody = player.GetComponent<Rigidbody>();
+              playerRigidbody.isKinematic = true;
+              playerRigidbody.transform.parent = playersSeatTransform.transform; //parent object to holdposition
+
+              Physics.IgnoreCollision(player.GetComponent<Collider>(), gameObject.GetComponent<Collider>(), true);
+              
               isInCar = true;
+              gameObject.layer = 8;
           }
       }
     private void FixedUpdate()
     {
+        if (exitCooldown > 0f)
+            exitCooldown -= Time.fixedDeltaTime;
+        
         if (isInCar)
         {
             steerInput = Input.GetAxis("Horizontal");
             accelInput = Input.GetAxis("Vertical");
+            
+            player.transform.position = playersSeatTransform.transform.position;
+            player.transform.rotation = playersSeatTransform.rotation;
         }
         foreach(var wheelTransform in carWheelTransforms)
         {
@@ -68,17 +81,29 @@ public class CarPhysics : MonoBehaviour, IInteractable
             }
         }
 
-        Debug.Log(steerInput);
-        
-        Debug.Log(accelInput);
-
-        if (isInCar && Input.GetKey(KeyCode.E))
+        if (isInCar && Input.GetKeyDown(KeyCode.E))
         {
             player.GetComponent<PhysicsBasedCharacterController>().enabled = true;
+            
+            //same as drop function, but add force to object before undefining it
+            
+            Rigidbody playerRigidbody = player.GetComponent<Rigidbody>();
+            playerRigidbody.isKinematic = false;
+            player.transform.parent = null;
+            
+            
             Vector3 Offset = new Vector3(-2f, 0.0f, 0);
-            player.transform.position = playersSeatTransform.position + Offset;
-            isInCar = false;
+            player.transform.position = playersSeatTransform.transform.position + Offset;
+            playerRigidbody.AddForce(transform.up * 300f);
+            Physics.IgnoreCollision(player.GetComponent<Collider>(), gameObject.GetComponent<Collider>(), false);
+            
+            
             cinemachineCamera.transform.LookAt(player.transform);
+            isInCar = false;
+            gameObject.layer = 3;
+            
+            // **Set cooldown**
+            exitCooldown = 0.5f;
         }
 
     }
