@@ -17,6 +17,7 @@ public class Pickup : MonoBehaviour, IInteractable
     private int LayerNumber; //layer index
     
     private Coroutine FloatingAnimCoroutine;
+    [SerializeField] public Animator playerAnimator;
     
     void Start()
     {
@@ -47,9 +48,12 @@ public class Pickup : MonoBehaviour, IInteractable
             {
                 //pass in object hit into the PickUpObject function
                 PickUpObject(hit.transform.gameObject);
+                
+                playerAnimator.SetBool("isHolding",true);
+                StopCoroutine(FloatingAnimCoroutine);
+                FloatingAnimCoroutine = null;
             }
-            StopCoroutine(FloatingAnimCoroutine);
-            FloatingAnimCoroutine = null;
+            
         }
         else
         {
@@ -101,6 +105,7 @@ public class Pickup : MonoBehaviour, IInteractable
         heldObjRb.isKinematic = false;
         heldObj.transform.parent = null; //unparent object
         heldObj = null; //undefine game object
+        playerAnimator.SetBool("isHolding",false);
     }
     void MoveObject()
     {
@@ -130,6 +135,7 @@ public class Pickup : MonoBehaviour, IInteractable
         heldObj.transform.parent = null;
         heldObjRb.AddForce(transform.forward * throwForce);
         heldObj = null;
+        playerAnimator.SetBool("isHolding",false);
     }
     void StopClipping() //function only called when dropping/throwing
     {
