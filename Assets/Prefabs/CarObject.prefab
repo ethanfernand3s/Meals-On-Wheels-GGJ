@@ -164,6 +164,10 @@ GameObject:
   - component: {fileID: 5062455669602198030}
   - component: {fileID: 8092247553364303738}
   - component: {fileID: 6408575097025477478}
+  - component: {fileID: 6189965358706274256}
+  - component: {fileID: 1441517864686878808}
+  - component: {fileID: 3090796007342197684}
+  - component: {fileID: 6064688015780895491}
   m_Layer: 3
   m_Name: CarObject
   m_TagString: Untagged
@@ -184,6 +188,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1826189238635021573}
   - {fileID: 7862435563678517729}
   - {fileID: 7510300034445205524}
   - {fileID: 5620753088163782098}
@@ -212,7 +217,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -318,7 +323,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   isInCar: 0
-  playersSeatTransform: {fileID: 7862435563678517729}
+  playersSeatTransform: {fileID: 1826189238635021573}
   player: {fileID: 0}
   cinemachineCamera: {fileID: 0}
 --- !u!65 &6408575097025477478
@@ -340,8 +345,92 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.58, y: 2.06, z: 5}
-  m_Center: {x: 0, y: 0.91, z: 0.27}
+  m_Size: {x: 0.35408676, y: 2.06, z: 5}
+  m_Center: {x: -1.0370433, y: 0.9100001, z: 0.26999998}
+--- !u!65 &6189965358706274256
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798526129255074251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.5757096, y: 0.12377739, z: 4.918879}
+  m_Center: {x: 0.0056141615, y: -0.039194554, z: 0.2122395}
+--- !u!65 &1441517864686878808
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798526129255074251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.35408676, y: 2.06, z: 5}
+  m_Center: {x: 1.037043, y: 0.9100001, z: 0.26999998}
+--- !u!65 &3090796007342197684
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798526129255074251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.5757096, y: 0.1853883, z: 4.918879}
+  m_Center: {x: 0.0056141615, y: 1.87, z: 0.2122395}
+--- !u!65 &6064688015780895491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798526129255074251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1.85, z: 1.71}
+  m_Center: {x: 0, y: 1.05, z: 1.81}
 --- !u!1 &2504626721405082928
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,6 +894,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5291462776470233518
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1826189238635021573}
+  m_Layer: 3
+  m_Name: PlayerSeat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1826189238635021573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291462776470233518}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.14858297, y: -0, z: -0, w: 0.98889995}
+  m_LocalPosition: {x: -0.492, y: 0.933, z: 1.04}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959010905728673104}
+  m_LocalEulerAnglesHint: {x: -17.09, y: 0, z: 0}
 --- !u!1 &5967858525072382075
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,6 +1021,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4146025371479920358}
+  - component: {fileID: 7804656907918344877}
+  - component: {fileID: 8709716075917017580}
+  - component: {fileID: 7990950791161002227}
   m_Layer: 3
   m_Name: GGjCarfbx
   m_TagString: Untagged
@@ -928,6 +1051,62 @@ Transform:
   - {fileID: 7479286669089846814}
   m_Father: {fileID: 959010905728673104}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &7804656907918344877
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6346572463156578057}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1b83f406a03f0694983e2402dfd37783, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!65 &8709716075917017580
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6346572463156578057}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 1.5, z: 1.0423965}
+  m_Center: {x: 0, y: 1.54, z: -2.1911983}
+--- !u!114 &7990950791161002227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6346572463156578057}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16ae634283d19e40a1211078e73bd9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 7804656907918344877}
 --- !u!1 &7228141159396855458
 GameObject:
   m_ObjectHideFlags: 0
