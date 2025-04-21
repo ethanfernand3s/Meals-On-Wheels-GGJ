@@ -15,6 +15,7 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     private Vector2 _moveContext;
     private ParticleSystem.EmissionModule _emission;
     private bool grounded;
+    
 
     [Header("Other:")]
     [SerializeField] private bool _adjustInputsToCameraAngle = false;
@@ -71,7 +72,9 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     [SerializeField] private float _fallGravityFactor = 10f; // typically > 1f (i.e. 5f).
     [SerializeField] private float _lowJumpFactor = 2.5f;
     [SerializeField] private float _jumpBuffer = 0.15f; // Note, jumpBuffer shouldn't really exceed the time of the jump.
-    [SerializeField] private float _coyoteTime = 0.25f;
+    [SerializeField] private float _coyoteTime = 0.25f; 
+    
+    private Vector3 startLocation;
 
     /// <summary>
     /// Prepare frequently used variables.
@@ -80,7 +83,7 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _gravitationalForce = Physics.gravity * _rb.mass;
-
+        startLocation = gameObject.transform.position;
         if (_dustParticleSystem)
         {
             _emission = _dustParticleSystem.emission; // Stores the module in a local variable
@@ -151,6 +154,7 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+       
        float currentSpeed = new Vector3(_rb.linearVelocity.x, 0f, _rb.linearVelocity.z).magnitude;
 
         animatorControl.SetBool("isWalking", currentSpeed> 0.1f);
@@ -463,4 +467,6 @@ public class PhysicsBasedCharacterController : MonoBehaviour
             }
         }
     }
+    
+   
 }

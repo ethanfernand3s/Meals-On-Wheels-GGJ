@@ -102,7 +102,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3397347375495472369}
-  - component: {fileID: 8726592274553781011}
   - component: {fileID: 3584089187993116682}
   m_Layer: 3
   m_Name: HomelessPersonBody
@@ -126,14 +125,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9073534663301641689}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8726592274553781011
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4277473319104153921}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &3584089187993116682
 MeshRenderer:
   m_ObjectHideFlags: 0

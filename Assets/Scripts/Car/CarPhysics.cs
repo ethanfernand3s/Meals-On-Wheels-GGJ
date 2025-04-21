@@ -33,7 +33,9 @@ public class CarPhysics : MonoBehaviour, IInteractable
         public GameObject player;
         public CinemachineCamera cinemachineCamera;
         private float exitCooldown = 0f;
-    
+        public OutOfBoundsVolume outOfBoundsZone;
+        private bool hasBeenReset = false;
+        public Transform safePosition;
       private void Start()
       {
           carRigidBody = GetComponent<Rigidbody>();
@@ -59,6 +61,22 @@ public class CarPhysics : MonoBehaviour, IInteractable
       }
     private void FixedUpdate()
     {
+        if (outOfBoundsZone != null && outOfBoundsZone.IsOutsideBounds(transform.position))
+        {
+            if (!hasBeenReset)
+            {
+                carRigidBody.linearVelocity = Vector3.zero;
+                carRigidBody.angularVelocity = Vector3.zero;
+                transform.position = safePosition.position;
+                transform.rotation = safePosition.rotation;
+
+                hasBeenReset = true;
+            }
+        }
+        else
+        {
+            hasBeenReset = false;
+        }
         if (exitCooldown > 0f)
             exitCooldown -= Time.fixedDeltaTime;
         
