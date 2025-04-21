@@ -20,6 +20,7 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     [SerializeField] private bool _adjustInputsToCameraAngle = false;
     [SerializeField] private LayerMask _terrainLayer;
     [SerializeField] private ParticleSystem _dustParticleSystem;
+    [SerializeField] public Animator animatorControl;
 
     private bool _shouldMaintainHeight = true;
 
@@ -85,6 +86,11 @@ public class PhysicsBasedCharacterController : MonoBehaviour
             _emission = _dustParticleSystem.emission; // Stores the module in a local variable
             _emission.enabled = false; // Applies the new value directly to the Particle System
         }
+
+        if (animatorControl == null)
+        {
+            animatorControl = GetComponentInChildren<Animator>();
+        }
     }
 
     /// <summary>
@@ -145,6 +151,10 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     /// </summary>
     private void FixedUpdate()
     {
+       float currentSpeed = new Vector3(_rb.linearVelocity.x, 0f, _rb.linearVelocity.z).magnitude;
+
+        animatorControl.SetBool("isWalking", currentSpeed> 0.1f);
+        
         _moveInput = new Vector3(Input.GetAxis("Horizontal"),0f, Input.GetAxis("Vertical"));
         
         if (_adjustInputsToCameraAngle)
@@ -154,7 +164,7 @@ public class PhysicsBasedCharacterController : MonoBehaviour
 
         (bool rayHitGround, RaycastHit rayHit) = RaycastToGround();
         SetPlatform(rayHit);
-
+        
         grounded = CheckIfGrounded(rayHitGround, rayHit);
         if (grounded)
         {
@@ -256,6 +266,12 @@ public class PhysicsBasedCharacterController : MonoBehaviour
             hitBody.AddForceAtPosition(-maintainHeightForce, rayHit.point);
         }
     }
+  //  private float GetHorizontalSpeed()
+  //  {
+  //      Vector3 horizontalVelocity = _rb.linearVelocity;
+    //    horizontalVelocity.y = 0f;
+   //     return horizontalVelocity.magnitude;
+   // }
 
     /// <summary>
     /// Determines the desired y rotation for the character, with account for platform rotation.
