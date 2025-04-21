@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Pickup : MonoBehaviour, IInteractable
 {
-    public static Pickup Instance;
     public GameObject player;
     public Transform holdPos;
     public FoodType foodType;
@@ -20,23 +19,22 @@ public class Pickup : MonoBehaviour, IInteractable
     private Coroutine FloatingAnimCoroutine;
     [SerializeField] public Animator playerAnimator;
     
+    private float startY;
+
     void Start()
     {
-        if(Instance == null)
-            Instance = this;
         LayerNumber = LayerMask.NameToLayer("holdLayer");
-        
+
+        startY = transform.position.y;
         FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
     }
 
     private IEnumerator PickupFloatingAnimation()
     {
-        gameObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        
         while (heldObj == null)
         {
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, .75f + Mathf.Sin(Time.time) * 0.5f, gameObject.transform.position.z);
-            
+            float floatOffset = 0.25f * Mathf.Sin(Time.time * 2f); // faster gentle bob
+            transform.position = new Vector3(transform.position.x, startY + floatOffset, transform.position.z);
             yield return null;
         }
     }
@@ -81,6 +79,7 @@ public class Pickup : MonoBehaviour, IInteractable
         {
             if (gameObject.GetComponent<Rigidbody>().linearVelocity == Vector3.zero)
             {
+                startY = transform.position.y;
                 FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
             }
         }

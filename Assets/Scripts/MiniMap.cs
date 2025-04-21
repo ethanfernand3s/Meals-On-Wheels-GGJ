@@ -10,7 +10,7 @@ public class MiniMap : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M))
         {
             isCentered = !isCentered; // Toggle centering mode
         }

@@ -19,7 +19,7 @@ public class Interact : MonoBehaviour
 
     private void TryInteract()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));     
         Debug.DrawRay(ray.origin, ray.direction * interactRange, Color.red);
 
         // Use the interactLayer in the Raycast

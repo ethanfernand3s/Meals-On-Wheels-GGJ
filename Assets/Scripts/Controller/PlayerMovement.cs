@@ -172,7 +172,27 @@ public class PhysicsBasedCharacterController : MonoBehaviour
         grounded = CheckIfGrounded(rayHitGround, rayHit);
         if (grounded)
         {
+            if (_prevGrounded == false)
+            {
+                if (!FindFirstObjectByType<AudioManager>().IsPlaying("Land"))
+                {
+                    FindFirstObjectByType<AudioManager>().Play("Land");
+                }
 
+            }
+
+            if (_moveInput.magnitude != 0)
+            {
+                if (!FindFirstObjectByType<AudioManager>().IsPlaying("Walking"))
+                {
+                    FindFirstObjectByType<AudioManager>().Play("Walking");
+                }
+            }
+            else
+            {
+                FindFirstObjectByType<AudioManager>().Stop("Walking");
+            }
+            
             if (_dustParticleSystem)
             {
                 if (_emission.enabled == false)
@@ -190,7 +210,8 @@ public class PhysicsBasedCharacterController : MonoBehaviour
         }
         else
         {
-
+            FindFirstObjectByType<AudioManager>().Stop("Walking");
+            
             if (_dustParticleSystem)
             {
                 if (_emission.enabled == true)
@@ -463,6 +484,8 @@ public class PhysicsBasedCharacterController : MonoBehaviour
                     _rb.AddForce(Vector3.up * _jumpForceFactor, ForceMode.Impulse); // This does not work very consistently... Jump height is affected by initial y velocity and y position relative to RideHeight... Want to adopt a fancier approach (more like PlayerMovement). A cheat fix to ensure consistency has been issued above...
                     _timeSinceJumpPressed = _jumpBuffer; // So as to not activate further jumps, in the case that the player lands before the jump timer surpasses the buffer.
                     _timeSinceJump = 0f;
+                    
+                    FindFirstObjectByType<AudioManager>().Play("Jump");
                 }
             }
         }

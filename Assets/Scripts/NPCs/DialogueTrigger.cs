@@ -33,10 +33,16 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
 
     public Dialogue[] dialogue = new Dialogue[3];
     public GameObject playersHandSocket;
+    public Animator playerAnimator;
+
+    public GameObject statusCompleted;
+    public GameObject statusHelp;
 
     private void Start()
     {
         _preferredFoodTypes = gameObject.GetComponent<PreferredFood>().foodTypes;
+        statusHelp.gameObject.SetActive(true);
+        statusCompleted.gameObject.SetActive(false);
     }
 
     public void Interact(RaycastHit hit)
@@ -47,6 +53,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
             
         if (_dialogueIndex == 0)
         {
+            statusHelp.gameObject.SetActive(false);
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex++]);
         }
         else if (curPickupInstance == null)
@@ -57,7 +64,19 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         {
             _dialogueIndex++;
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex++]);
-            Destroy(Pickup.Instance.gameObject);
+            Destroy(curPickupInstance.gameObject);
+            playerAnimator.SetBool("isHolding",false);
+            statusCompleted.gameObject.SetActive(true);
+
+            if (PlayerStats.instance != null)
+            {
+                PlayerStats.instance.peopleHelped++;
+
+                if (PlayerStats.instance.peopleHelped == PlayerStats.instance.maxPeopleToHelp)
+                {
+                    GameManager.Instance.TriggerGameOver();
+                }
+            }
         }
         else
         {

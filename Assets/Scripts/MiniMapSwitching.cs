@@ -16,7 +16,7 @@ public class MiniMapSwitching : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M))
         {
             isMinimapActive = !isMinimapActive;
 
