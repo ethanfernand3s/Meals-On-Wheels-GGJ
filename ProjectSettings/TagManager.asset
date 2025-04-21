@@ -6,6 +6,8 @@ TagManager:
   tags:
   - canPickUp
   - Ground
+  - OutOfBounds
+  - Car
   layers:
   - Default
   - TransparentFX
@@ -16,7 +18,7 @@ TagManager:
   - Player
   - holdLayer
   - Platform
-  - 
+  - OutOfBounds
   - 
   - 
   - 
