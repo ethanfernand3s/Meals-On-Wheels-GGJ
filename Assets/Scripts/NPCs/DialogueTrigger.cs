@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
+using NPCs;
 using UnityEngine;
  
 [System.Serializable]
@@ -25,27 +28,40 @@ public class Dialogue
  
 public class DialogueTrigger : MonoBehaviour, IInteractable
 {
-    public Dialogue[] dialogue = new Dialogue[3];
     private int _dialogueIndex = 0;
-    
-    
+    private FoodType[] _preferredFoodTypes;
+
+    public Dialogue[] dialogue = new Dialogue[3];
+    public GameObject playersHandSocket;
+
+    private void Start()
+    {
+        _preferredFoodTypes = gameObject.GetComponent<PreferredFood>().foodTypes;
+    }
+
     public void Interact(RaycastHit hit)
     {
         if(!(_dialogueIndex < dialogue.Length)) return;
-        
+
+        Pickup curPickupInstance = playersHandSocket.GetComponentInChildren<Pickup>();
+            
         if (_dialogueIndex == 0)
         {
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex++]);
         }
-        else if (Pickup.Instance.heldObj == null)
+        else if (curPickupInstance == null)
         {
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex]);
         }
-        else
+        else if(_preferredFoodTypes.Contains(curPickupInstance.foodType))
         {
             _dialogueIndex++;
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex++]);
             Destroy(Pickup.Instance.gameObject);
+        }
+        else
+        {
+            // Display UI MSG Saying: "Not there favorite food"
         }
     }
 }

@@ -8,10 +8,11 @@ public class Pickup : MonoBehaviour, IInteractable
     public static Pickup Instance;
     public GameObject player;
     public Transform holdPos;
+    public FoodType foodType;
     
     public float throwForce = 500f; //force at which the object is thrown at
     private float rotationSensitivity = 1f; //how fast/slow the object is rotated in relation to mouse movement
-    public GameObject heldObj; //object which we pick up
+    private GameObject heldObj; //object which we pick up
     private Rigidbody heldObjRb; //rigidbody of object we pick up
     private bool canDrop = true; //this is needed so we don't throw/drop object when rotating the object
     private int LayerNumber; //layer index
