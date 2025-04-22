@@ -14,6 +14,16 @@ public class DoorsBehavior : MonoBehaviour, IInteractable
         _collider = gameObject.GetComponent<Collider>();
     }
 
+    private void Update()
+    {
+        if (_isDoorOpen && transform.parent.GetComponent<Rigidbody>().linearVelocity.magnitude > 0.1f)
+        {
+            animator.Play("DoorsClose");
+            _isDoorOpen = false;
+            _collider.isTrigger = false;
+        }
+    }
+
     public void Interact(RaycastHit hit)
     {
         if (!_isDoorOpen)

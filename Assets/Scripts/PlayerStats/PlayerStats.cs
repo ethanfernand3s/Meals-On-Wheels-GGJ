@@ -5,6 +5,8 @@ public class PlayerStats : MonoBehaviour
     public static PlayerStats instance;
     public int peopleHelped;
     public int maxPeopleToHelp;
+
+    public bool holdingObj;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -13,5 +15,7 @@ public class PlayerStats : MonoBehaviour
             instance = this;
         peopleHelped = 0;
         maxPeopleToHelp = 7;
+        
+        holdingObj = false;
     }
 }

@@ -44,16 +44,17 @@ public class CarPhysics : MonoBehaviour, IInteractable
 
       public void Interact(RaycastHit hit)
       {
-          if (!isInCar && exitCooldown <= 0f)
+          if (!isInCar && exitCooldown <= 0f && hit.collider.gameObject.CompareTag("Car") && !PlayerStats.instance.holdingObj)
           {
               cinemachineCamera.transform.LookAt(gameObject.transform);
               player.GetComponent<PhysicsBasedCharacterController>().enabled = false;
+              Camera.main.GetComponent<Interact>().enabled = false;
               
               Rigidbody playerRigidbody = player.GetComponent<Rigidbody>();
               playerRigidbody.isKinematic = true;
               playerRigidbody.transform.parent = playersSeatTransform.transform; //parent object to holdposition
 
-              Physics.IgnoreCollision(player.GetComponent<Collider>(), gameObject.GetComponent<Collider>(), true);
+              player.GetComponent<Collider>().enabled = false;
               
               isInCar = true;
               gameObject.layer = 8;
@@ -102,6 +103,7 @@ public class CarPhysics : MonoBehaviour, IInteractable
         if (isInCar && Input.GetKeyDown(KeyCode.E))
         {
             player.GetComponent<PhysicsBasedCharacterController>().enabled = true;
+            Camera.main.GetComponent<Interact>().enabled = true;
             
             //same as drop function, but add force to object before undefining it
             
@@ -113,7 +115,7 @@ public class CarPhysics : MonoBehaviour, IInteractable
             Vector3 Offset = new Vector3(-2f, 0.0f, 0);
             player.transform.position = playersSeatTransform.transform.position + Offset;
             playerRigidbody.AddForce(transform.up * 300f);
-            Physics.IgnoreCollision(player.GetComponent<Collider>(), gameObject.GetComponent<Collider>(), false);
+            player.GetComponent<Collider>().enabled = true;
             
             
             cinemachineCamera.transform.LookAt(player.transform);
