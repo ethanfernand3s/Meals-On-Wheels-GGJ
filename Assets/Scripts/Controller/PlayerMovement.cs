@@ -172,14 +172,6 @@ public class PhysicsBasedCharacterController : MonoBehaviour
         grounded = CheckIfGrounded(rayHitGround, rayHit);
         if (grounded)
         {
-            if (_prevGrounded == false)
-            {
-                if (!FindFirstObjectByType<AudioManager>().IsPlaying("Land"))
-                {
-                    FindFirstObjectByType<AudioManager>().Play("Land");
-                }
-
-            }
 
             if (_moveInput.magnitude != 0)
             {
@@ -241,6 +233,7 @@ public class PhysicsBasedCharacterController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
+            FindFirstObjectByType<AudioManager>().Play("Jump");
             _rb.AddForce(new Vector3(0, _jumpForceFactor, 0), ForceMode.Impulse);
         }
     }
