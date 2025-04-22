@@ -6,7 +6,7 @@ using TMPro;
  
 public class DialogueManager : MonoBehaviour
 {
-    public FadeManager fadeManager;
+
     public static DialogueManager Instance;
  
     public Image characterIcon;
@@ -21,10 +21,7 @@ public class DialogueManager : MonoBehaviour
     public float typingSpeed = 0.2f;
  
     public Animator animator;
-    private void Start()
-    {
-        fadeManager.FadeIn();
-    }
+  
     private void Awake()
     {
         if (Instance == null)

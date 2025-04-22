@@ -1,30 +1,38 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // If you want to load scenes later
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class FinishedGameScreen : MonoBehaviour
 {
-    public TextMeshProUGUI finalTimeText; // Assign in Inspector
-    public GameObject cutsceneObject; // Optional: a GameObject to enable as a cutscene
+    public TextMeshProUGUI finalTimeText; // Assign the "00'00'00" text
+    public Button nextSceneButton;
 
-    // Called by TimeText script
-    public void SetFinalTime(float totalTime)
+    private TimeText timeText;
+
+    void Start()
     {
-        int hours = Mathf.FloorToInt(totalTime / 3600f);
-        int minutes = Mathf.FloorToInt((totalTime % 3600f) / 60f);
-        int seconds = Mathf.FloorToInt(totalTime % 60f);
-        finalTimeText.text = string.Format("{0:00}:{1:00}:{2:00}", hours, minutes, seconds);
+        // Find the TimeText object (modern Unity API)
+        timeText = Object.FindFirstObjectByType<TimeText>();
+        SetFinalTime();
     }
 
-    // Assign this to a button in UI to play the cutscene
-    public void PlayCutscene()
+    public void SetFinalTime()
     {
-        if (cutsceneObject != null)
+        if (finalTimeText != null && timeText != null)
         {
-            cutsceneObject.SetActive(true); // Or trigger an animation/camera/etc.
+            string formattedTime = timeText.GetFormattedFinalTime();
+            finalTimeText.text = formattedTime;
+            Debug.Log("Final Time Set To: " + formattedTime);
         }
+        else
+        {
+            Debug.LogWarning("Missing references: TimeText or finalTimeText");
+        }
+    }
 
-        // Optional: load scene after cutscene
-        // SceneManager.LoadScene("NextScene");
+    public void GoToNextScene()
+    {
+        SceneManager.LoadScene(2); // Loads scene with index 2
     }
 }
