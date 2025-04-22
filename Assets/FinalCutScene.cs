@@ -8,18 +8,15 @@ public class FinalCutScene : MonoBehaviour
 {
     [Header("Slide Settings")]
     public List<Sprite> slides;
-    public float fadeDuration = 1f;
-
-    [Header("Audio")]
-    public AudioSource musicSource;
-    public AudioClip backgroundMusic;
-    public AudioSource voiceSource;
-    public AudioClip narrationClip; // ← Single voiceover audio
 
     [Header("UI References")]
-    public Image slideshowPanel;
+    public Image slideshowImage;
     public Image finalImage;
     public Button mainMenuButton;
+    public Sprite finalSlideImage;
+
+    [Header("Fade Settings")]
+    public float fadeDuration = 1f;
 
     private int currentSlide = 0;
     private CanvasGroup canvasGroup;
@@ -27,80 +24,66 @@ public class FinalCutScene : MonoBehaviour
 
     private void Start()
     {
-        // Add CanvasGroup for fade control
-        canvasGroup = slideshowPanel.GetComponent<CanvasGroup>();
+        canvasGroup = slideshowImage.GetComponent<CanvasGroup>();
         if (canvasGroup == null)
-            canvasGroup = slideshowPanel.gameObject.AddComponent<CanvasGroup>();
+            canvasGroup = slideshowImage.gameObject.AddComponent<CanvasGroup>();
 
-        // Hide final image and menu button
+        if (slides != null && slides.Count > 0)
+        {
+            slideshowImage.sprite = slides[0];
+        }
+
         finalImage.gameObject.SetActive(false);
         mainMenuButton.gameObject.SetActive(false);
-
-        // Play background music
-        if (backgroundMusic != null && musicSource != null)
-        {
-            musicSource.clip = backgroundMusic;
-            musicSource.loop = true;
-            musicSource.Play();
-        }
-
-        // Play voice narration (once)
-        if (narrationClip != null && voiceSource != null)
-        {
-            voiceSource.clip = narrationClip;
-            voiceSource.loop = false;
-            voiceSource.Play();
-        }
-
-        StartCoroutine(ShowSlide(currentSlide));
+        canvasGroup.alpha = 1f;
     }
 
     private void Update()
     {
-        if (!isTransitioning && (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return)))
+        if (!isTransitioning && Input.GetMouseButtonDown(0))
         {
-            StartCoroutine(NextSlide());
+            StartCoroutine(AdvanceSlide());
         }
     }
 
-    private IEnumerator ShowSlide(int index)
+    private IEnumerator AdvanceSlide()
     {
         isTransitioning = true;
 
-        slideshowPanel.sprite = slides[index];
-        yield return StartCoroutine(FadeIn());
-
-        isTransitioning = false;
-    }
-
-    private IEnumerator NextSlide()
-    {
-        isTransitioning = true;
-
+        // Fade out
         yield return StartCoroutine(FadeOut());
 
         currentSlide++;
 
         if (currentSlide < slides.Count)
         {
-            yield return StartCoroutine(ShowSlide(currentSlide));
+            slideshowImage.sprite = slides[currentSlide];
+            yield return StartCoroutine(FadeIn());
+            isTransitioning = false;
         }
         else
         {
-            yield return StartCoroutine(FadeToFinal());
-        }
-    }
+            slideshowImage.gameObject.SetActive(false);
 
-    private IEnumerator FadeIn()
-    {
-        float timer = 0f;
-        while (timer < fadeDuration)
-        {
-            canvasGroup.alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
-            timer += Time.deltaTime;
-            yield return null;
+            if (finalImage != null && finalSlideImage != null)
+            {
+                finalImage.sprite = finalSlideImage;
+                finalImage.color = new Color(1, 1, 1, 0);
+                finalImage.gameObject.SetActive(true);
+
+                float timer = 0f;
+                while (timer < fadeDuration)
+                {
+                    float alpha = timer / fadeDuration;
+                    finalImage.color = new Color(1, 1, 1, alpha);
+                    timer += Time.deltaTime;
+                    yield return null;
+                }
+                finalImage.color = Color.white;
+            }
+
+            mainMenuButton.gameObject.SetActive(true);
         }
-        canvasGroup.alpha = 1f;
     }
 
     private IEnumerator FadeOut()
@@ -115,48 +98,20 @@ public class FinalCutScene : MonoBehaviour
         canvasGroup.alpha = 0f;
     }
 
-    private IEnumerator FadeToFinal()
+    private IEnumerator FadeIn()
     {
-        slideshowPanel.gameObject.SetActive(false);
-
-        // Final image fade-in
-        finalImage.gameObject.SetActive(true);
-        Color imageColor = finalImage.color;
-        imageColor.a = 0f;
-        finalImage.color = imageColor;
-
         float timer = 0f;
         while (timer < fadeDuration)
         {
-            float alpha = timer / fadeDuration;
-            finalImage.color = new Color(imageColor.r, imageColor.g, imageColor.b, alpha);
+            canvasGroup.alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
             timer += Time.deltaTime;
             yield return null;
         }
-        finalImage.color = new Color(imageColor.r, imageColor.g, imageColor.b, 1f);
+        canvasGroup.alpha = 1f;
+    }
 
-        // Fade in main menu button
-        mainMenuButton.gameObject.SetActive(true);
-        CanvasGroup buttonGroup = mainMenuButton.GetComponent<CanvasGroup>();
-        if (buttonGroup == null)
-            buttonGroup = mainMenuButton.gameObject.AddComponent<CanvasGroup>();
-
-        buttonGroup.alpha = 0f;
-        timer = 0f;
-        while (timer < fadeDuration)
-        {
-            buttonGroup.alpha = Mathf.Lerp(0f, 1f, timer / fadeDuration);
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        buttonGroup.alpha = 1f;
-
-        mainMenuButton.onClick.RemoveAllListeners();
-        mainMenuButton.onClick.AddListener(() =>
-        {
-            SceneManager.LoadScene(0);// Replace with your scene name
-        });
-
-        isTransitioning = false;
+    public void ExitToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

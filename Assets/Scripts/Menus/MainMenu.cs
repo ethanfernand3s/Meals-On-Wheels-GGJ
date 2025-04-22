@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,8 +11,14 @@ public class MainMenu : MonoBehaviour
         fadeManager.FadeToScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    public void settingsButton()
+    public void QuitButton()
     {
-        
+#if UNITY_EDITOR
+        // Stop play mode if in Editor
+        EditorApplication.isPlaying = false;
+#else
+        // Quit the application if in a build
+        Application.Quit();
+#endif
     }
 }

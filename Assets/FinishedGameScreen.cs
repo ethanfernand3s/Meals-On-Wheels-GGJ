@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class FinishedGameScreen : MonoBehaviour
 {
     public TextMeshProUGUI finalTimeText; // Assign the "00'00'00" text
-    public Button nextSceneButton;
+
 
     private TimeText timeText;
 
