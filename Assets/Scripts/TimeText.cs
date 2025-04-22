@@ -3,15 +3,15 @@ using TMPro;
 
 public class TimeText : MonoBehaviour
 {
-    public TextMeshProUGUI timerText; // Assign in Inspector
-    public GameObject finishedGameScreen;
+    public TextMeshProUGUI timerText; // Assign the live timer (top corner)
+    public GameObject finishedGameScreen; // Assign the COMPLETE panel
+
     private float _startTime;
     private float _endTime;
     private bool _timerRunning = false;
 
     void Start()
     {
-        timerText.text = "00:00:00";
         timerText.text = "00:00:00";
         StartTimer();
     }
@@ -32,25 +32,38 @@ public class TimeText : MonoBehaviour
 
     public void StopTimer()
     {
-        if (finishedGameScreen != null)
-        {
-            finishedGameScreen.SetActive(true); 
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
         if (_timerRunning)
         {
             _endTime = Time.time;
             _timerRunning = false;
 
+            float totalTime = _endTime - _startTime;
+
             if (timerText != null)
-                timerText.text = FormatTime(_endTime - _startTime);
+                timerText.text = FormatTime(totalTime);
+
+            // Show end screen
+            if (finishedGameScreen != null)
+            {
+                finishedGameScreen.SetActive(true);
+
+                // Get the component and set final time
+                FinishedGameScreen screenScript = finishedGameScreen.GetComponent<FinishedGameScreen>();
+                if (screenScript != null)
+                {
+                    screenScript.SetFinalTime();
+                }
+
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+            }
         }
     }
 
-    public float GetScoreTime()
+    public string GetFormattedFinalTime()
     {
-        return _timerRunning ? Time.time - _startTime : _endTime - _startTime;
+        float finalTime = _timerRunning ? Time.time - _startTime : _endTime - _startTime;
+        return FormatTime(finalTime);
     }
 
     private string FormatTime(float time)

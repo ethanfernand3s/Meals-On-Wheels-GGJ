@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
 using NPCs;
+using TMPro;
 using UnityEngine;
  
 [System.Serializable]
@@ -37,12 +38,17 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
 
     public GameObject statusCompleted;
     public GameObject statusHelp;
+    public GameObject statusCompletedMinimap;
+    public GameObject statusHelpMinimap;
+    public TextMeshProUGUI peopleHelpedText;
 
     private void Start()
     {
         _preferredFoodTypes = gameObject.GetComponent<PreferredFood>().foodTypes;
         statusHelp.gameObject.SetActive(true);
         statusCompleted.gameObject.SetActive(false);
+        statusCompletedMinimap.gameObject.SetActive(false);
+        statusHelpMinimap.gameObject.SetActive(false);
     }
 
     public void Interact(RaycastHit hit)
@@ -60,18 +66,26 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         {
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex]);
         }
-        else if(_preferredFoodTypes.Contains(curPickupInstance.foodType))
+        else if (_preferredFoodTypes.Contains(curPickupInstance.foodType))
         {
             _dialogueIndex++;
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex++]);
             Destroy(curPickupInstance.gameObject);
-            playerAnimator.SetBool("isHolding",false);
+            playerAnimator.SetBool("isHolding", false);
             statusCompleted.gameObject.SetActive(true);
+            statusCompletedMinimap.gameObject.SetActive(true);
+            statusHelpMinimap.gameObject.SetActive(false);
+            
 
-            if (PlayerStats.instance != null)
+        if (PlayerStats.instance != null)
             {
                 PlayerStats.instance.peopleHelped++;
-
+                
+                if (peopleHelpedText != null)
+                {
+                    peopleHelpedText.text = PlayerStats.instance.peopleHelped.ToString();
+                }
+                
                 if (PlayerStats.instance.peopleHelped == PlayerStats.instance.maxPeopleToHelp)
                 {
                     GameManager.Instance.TriggerGameOver();
