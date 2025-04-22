@@ -58,6 +58,11 @@ public class CarPhysics : MonoBehaviour, IInteractable
               
               isInCar = true;
               gameObject.layer = 8;
+
+              if (FindFirstObjectByType<AudioManager>().IsPlaying("Walking"))
+              {
+                  FindFirstObjectByType<AudioManager>().Stop("Walking");
+              }
           }
       }
     private void FixedUpdate()
@@ -85,6 +90,18 @@ public class CarPhysics : MonoBehaviour, IInteractable
         {
             steerInput = Input.GetAxis("Horizontal");
             accelInput = Input.GetAxis("Vertical");
+            
+            if (accelInput != 0)
+            {
+                if (!FindFirstObjectByType<AudioManager>().IsPlaying("Driving"))
+                {
+                    FindFirstObjectByType<AudioManager>().Play("Driving");
+                }
+            }
+            else
+            {
+                FindFirstObjectByType<AudioManager>().Stop("Driving");
+            }
             
             player.transform.position = playersSeatTransform.transform.position;
             player.transform.rotation = playersSeatTransform.rotation;
@@ -124,6 +141,11 @@ public class CarPhysics : MonoBehaviour, IInteractable
             
             // **Set cooldown**
             exitCooldown = 0.5f;
+            
+            if(FindFirstObjectByType<AudioManager>().IsPlaying("Driving"))
+            {
+                FindFirstObjectByType<AudioManager>().Stop("Driving");
+            }
         }
 
     }

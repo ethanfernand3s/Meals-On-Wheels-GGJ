@@ -10,7 +10,6 @@ using UnityEngine;
 public class DialogueCharacter
 {
     public string name;
-    public Sprite icon;
 }
  
 [System.Serializable]
@@ -61,6 +60,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         {
             statusHelp.gameObject.SetActive(false);
             DialogueManager.Instance.StartDialogue(dialogue[_dialogueIndex++]);
+            FindFirstObjectByType<AudioManager>().Play("ScreenPopUp");
         }
         else if (curPickupInstance == null)
         {
@@ -76,10 +76,10 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
             statusCompletedMinimap.gameObject.SetActive(true);
             statusHelpMinimap.gameObject.SetActive(false);
             
-
         if (PlayerStats.instance != null)
             {
                 PlayerStats.instance.peopleHelped++;
+                FindFirstObjectByType<AudioManager>().Play("PersonFed");
                 
                 if (peopleHelpedText != null)
                 {
@@ -95,6 +95,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         else
         {
             // Display UI MSG Saying: "Not there favorite food"
+            FindFirstObjectByType<AudioManager>().Play("FoodDenied");
         }
     }
 }

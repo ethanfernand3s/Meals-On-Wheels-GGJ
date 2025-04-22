@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            FindFirstObjectByType<AudioManager>().Play("BackgroundMusic");
             DontDestroyOnLoad(gameObject); // Optional
         }
         else
@@ -40,6 +41,7 @@ public class GameManager : MonoBehaviour
 
         Time.timeScale = 0f;
 
+        FindFirstObjectByType<AudioManager>().Play("GameWon");
         if (gameOverUI != null)
             gameOverUI.SetActive(true);
 
@@ -58,17 +60,19 @@ public class GameManager : MonoBehaviour
 
         Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
         Cursor.visible = isPaused;
+        
+        if (isPaused)
+        {
+            FindFirstObjectByType<AudioManager>().Play("ScreenClose");
+        }
+        else
+        {
+            FindFirstObjectByType<AudioManager>().Play("ScreenPopUp");
+        }
     }
-
     public void RestartGame()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void GoToMainMenu()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu"); // Change as needed
     }
 }

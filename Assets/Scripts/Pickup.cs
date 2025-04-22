@@ -25,7 +25,7 @@ public class Pickup : MonoBehaviour, IInteractable
     {
         LayerNumber = LayerMask.NameToLayer("holdLayer");
         startY = transform.position.y;
-        FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
+        //FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
     }
 
     private IEnumerator PickupFloatingAnimation()
@@ -82,8 +82,8 @@ public class Pickup : MonoBehaviour, IInteractable
             if (!isAttachedToTrunk && GetComponent<Rigidbody>().linearVelocity == Vector3.zero)
             {
                 startY = transform.position.y;
-                if (FloatingAnimCoroutine == null)
-                    FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
+               // if (FloatingAnimCoroutine == null)
+                   // FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
             }
         }
     }
@@ -123,7 +123,7 @@ public class Pickup : MonoBehaviour, IInteractable
 
         heldObj = null;
         playerAnimator.SetBool("isHolding", false);
-        FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
+       // FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
 
         PlayerStats.instance.holdingObj = false;
     }
@@ -135,8 +135,6 @@ public class Pickup : MonoBehaviour, IInteractable
         heldObjRb.isKinematic = false;
         heldObj.transform.parent = null;
 
-        heldObjRb.AddForce(Camera.main.transform.forward * throwForce);
-
         Pickup thrownPickup = heldObj.GetComponent<Pickup>();
         if (thrownPickup != null && thrownPickup.IsTouchingTrunk())
         {
@@ -145,7 +143,7 @@ public class Pickup : MonoBehaviour, IInteractable
 
         heldObj = null;
         playerAnimator.SetBool("isHolding", false);
-        FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
+        //FloatingAnimCoroutine = StartCoroutine(PickupFloatingAnimation());
         
         PlayerStats.instance.holdingObj = false;
     }
@@ -209,10 +207,11 @@ public class Pickup : MonoBehaviour, IInteractable
             }
         }
 
-        if (FloatingAnimCoroutine != null)
+        
+        /*if (FloatingAnimCoroutine != null)
         {
             StopCoroutine(FloatingAnimCoroutine);
             FloatingAnimCoroutine = null;
-        }
+        }*/
     }
 }

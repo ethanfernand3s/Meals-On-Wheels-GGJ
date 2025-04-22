@@ -8,8 +8,7 @@ public class DialogueManager : MonoBehaviour
 {
 
     public static DialogueManager Instance;
- 
-    public Image characterIcon;
+    
     public TextMeshProUGUI characterName;
     public TextMeshProUGUI dialogueArea;
     public TextMeshProUGUI buttonText;
@@ -54,6 +53,7 @@ public class DialogueManager : MonoBehaviour
  
     public void DisplayNextDialogueLine()
     {
+        FindFirstObjectByType<AudioManager>().Play("UIClick");
         if (lines.Count == 0)
         {
             EndDialogue();
@@ -65,10 +65,9 @@ public class DialogueManager : MonoBehaviour
         }
  
         DialogueLine currentLine = lines.Dequeue();
- 
-        characterIcon.sprite = currentLine.character.icon;
+        
         characterName.text = currentLine.character.name;
- 
+        
         StopAllCoroutines();
  
         StartCoroutine(TypeSentence(currentLine));
@@ -88,6 +87,7 @@ public class DialogueManager : MonoBehaviour
     {
         isDialogueActive = false;
         animator.Play("PopOut");
+        FindFirstObjectByType<AudioManager>().Play("ScreenClosed");
         
         gameObject.SetActive(isDialogueActive);
         Cursor.lockState = CursorLockMode.Locked;

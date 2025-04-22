@@ -19,6 +19,15 @@ public class MiniMapSwitching : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab) || Input.GetKeyDown(KeyCode.M))
         {
             isMinimapActive = !isMinimapActive;
+            if (isMinimapActive)
+            {
+                FindFirstObjectByType<AudioManager>().Play("ScreenClose");
+            }
+            else
+            {
+                FindFirstObjectByType<AudioManager>().Play("ScreenPopUp");
+            }
+            
 
             minimap.SetActive(isMinimapActive);
             centerMap.SetActive(!isMinimapActive);
